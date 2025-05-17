@@ -32,8 +32,8 @@ describe('AeropuertoService', () => {
       const aeropuertoEntity = await repository.save({
         nombre: faker.company.name(),
         codigo: faker.string.alpha(3).toUpperCase(),
-        pais: faker.address.country(),
-        ciudad: faker.address.city(),
+        pais: faker.location.country(),
+        ciudad: faker.location.city(),
         aerolineas: [],
       });
       aeropuertosList.push(aeropuertoEntity);
@@ -70,8 +70,8 @@ describe('AeropuertoService', () => {
       id: '',
       nombre: faker.company.name(),
       codigo: faker.string.alpha(3).toUpperCase(),
-      pais: faker.address.country(),
-      ciudad: faker.address.city(),
+      pais: faker.location.country(),
+      ciudad: faker.location.city(),
       aerolineas: [],
     };
 

@@ -6,7 +6,6 @@ import { faker } from '@faker-js/faker';
 import { TypeOrmTestingConfig } from '../shared/testing-utils/typeorm-testing-config';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AerolineaEntity } from './aerolinea.entity';
-import { AeropuertoEntity } from '../aeropuerto/aeropuerto.entity';
 
 describe('AerolineaService', () => {
   let service: AerolineaService;
@@ -74,7 +73,7 @@ describe('AerolineaService', () => {
       descripcion: faker.lorem.sentence(),
       fechaFundacion: faker.date.anytime(),
       paginaWeb: faker.internet.url(),
-      aeropuerto: new AeropuertoEntity(),
+      aeropuertos: [], // Or [new AeropuertoEntity()] if an airport should be associated
     };
 
     const newAerolinea = await service.create(aerolinea);

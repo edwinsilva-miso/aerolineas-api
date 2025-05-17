@@ -15,13 +15,13 @@ export class AerolineaService {
   ) {}
 
   async findAll(): Promise<AerolineaEntity[]> {
-    return await this.aerolineaRepository.find({ relations: ['aeropuerto'] });
+    return await this.aerolineaRepository.find({ relations: ['aeropuertos'] });
   }
 
   async findOne(id: string): Promise<AerolineaEntity> {
     const aerolinea = await this.aerolineaRepository.findOne({
       where: { id },
-      relations: ['aeropuerto'],
+      relations: ['aeropuertos'],
     });
     if (!aerolinea) {
       throw new BusinessLogicException(
@@ -42,7 +42,7 @@ export class AerolineaService {
   ): Promise<AerolineaEntity> {
     const persistedAerolinea = await this.aerolineaRepository.findOne({
       where: { id },
-      relations: ['aeropuerto'],
+      relations: ['aeropuertos'],
     });
     if (!persistedAerolinea) {
       throw new BusinessLogicException(
@@ -60,7 +60,7 @@ export class AerolineaService {
   async delete(id: string): Promise<void> {
     const aerolinea = await this.aerolineaRepository.findOne({
       where: { id },
-      relations: ['aeropuerto'],
+      relations: ['aeropuertos'],
     });
     if (!aerolinea) {
       throw new BusinessLogicException(
