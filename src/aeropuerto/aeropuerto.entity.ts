@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { AerolineaEntity } from 'src/aerolinea/aerolinea.entity';
+import { AerolineaEntity } from '../aerolinea/aerolinea.entity';
 
 @Entity('aeropuertos')
 export class AeropuertoEntity {
@@ -19,6 +19,6 @@ export class AeropuertoEntity {
   ciudad: string;
 
   // Relación con AerolineaEntity
-  @OneToMany(() => AerolineaEntity, aeropuerto => aeropuerto.aerolinea)
+  @OneToMany(() => AerolineaEntity, (aerolinea) => aerolinea.aeropuerto)
   aerolineas: AerolineaEntity[];
 }

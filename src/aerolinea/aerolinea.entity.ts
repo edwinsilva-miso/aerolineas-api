@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { AeropuertoEntity } from 'src/aeropuerto/aeropuerto.entity';
+import { AeropuertoEntity } from '../aeropuerto/aeropuerto.entity';
 
 @Entity('aerolineas')
 export class AerolineaEntity {
@@ -13,10 +13,10 @@ export class AerolineaEntity {
   descripcion: string;
 
   @Column()
-  fechaFundacion: string;
+  fechaFundacion: Date;
 
   @Column()
-  paginaWeb: Date;
+  paginaWeb: string;
 
   // Relación con AeropuertoEntity
   @ManyToOne(() => AeropuertoEntity, (aeropuerto) => aeropuerto.aerolineas)
