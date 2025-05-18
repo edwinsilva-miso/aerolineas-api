@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 export class AeropuertoDto {
+  @IsOptional()
+  @IsString()
+  id: string;
+
   @IsNotEmpty()
   @IsString()
   nombre: string;

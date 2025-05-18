@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  Param,
   Post,
   Put,
   UseInterceptors,
@@ -26,7 +27,7 @@ export class AerolineaController {
   }
 
   @Get(':id')
-  async findOne(id: string) {
+  async findOne(@Param('id') id: string) {
     return await this.aerolineaService.findOne(id);
   }
 
@@ -40,7 +41,7 @@ export class AerolineaController {
   }
 
   @Put(':id')
-  async update(id: string, @Body() aerolineaDto: AreolineaDto) {
+  async update(@Param('id') id: string, @Body() aerolineaDto: AreolineaDto) {
     const aerolinea = plainToInstance(
       AerolineaEntity,
       aerolineaDto,
@@ -50,7 +51,7 @@ export class AerolineaController {
 
   @Delete(':id')
   @HttpCode(204)
-  async delete(id: string) {
+  async delete(@Param('id') id: string) {
     return await this.aerolineaService.delete(id);
   }
 }

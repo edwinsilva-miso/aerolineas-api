@@ -20,7 +20,7 @@ export class AerolineaService {
 
   async findOne(id: string): Promise<AerolineaEntity> {
     const aerolinea = await this.aerolineaRepository.findOne({
-      where: { id },
+      where: { id: id },
       relations: ['aeropuertos'],
     });
     if (!aerolinea) {
@@ -41,7 +41,7 @@ export class AerolineaService {
     aerolinea: AerolineaEntity,
   ): Promise<AerolineaEntity> {
     const persistedAerolinea = await this.aerolineaRepository.findOne({
-      where: { id },
+      where: { id: id },
       relations: ['aeropuertos'],
     });
     if (!persistedAerolinea) {
@@ -59,7 +59,7 @@ export class AerolineaService {
 
   async delete(id: string): Promise<void> {
     const aerolinea = await this.aerolineaRepository.findOne({
-      where: { id },
+      where: { id: id },
       relations: ['aeropuertos'],
     });
     if (!aerolinea) {
@@ -68,6 +68,6 @@ export class AerolineaService {
         BusinessError.NOT_FOUND,
       );
     }
-    await this.aerolineaRepository.delete(id);
+    await this.aerolineaRepository.remove(aerolinea);
   }
 }

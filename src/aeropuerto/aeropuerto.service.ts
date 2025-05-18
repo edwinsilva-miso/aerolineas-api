@@ -20,7 +20,7 @@ export class AeropuertoService {
 
   async findOne(id: string): Promise<AeropuertoEntity> {
     const aeropuerto = await this.aeropuertoRepository.findOne({
-      where: { id },
+      where: { id: id },
       relations: ['aerolineas'],
     });
     if (!aeropuerto) {
@@ -41,7 +41,7 @@ export class AeropuertoService {
     aeropuerto: AeropuertoEntity,
   ): Promise<AeropuertoEntity> {
     const persistedAeropuerto = await this.aeropuertoRepository.findOne({
-      where: { id },
+      where: { id: id },
       relations: ['aerolineas'],
     });
     if (!persistedAeropuerto) {
@@ -58,7 +58,10 @@ export class AeropuertoService {
   }
 
   async delete(id: string): Promise<void> {
-    const aeropuerto = await this.findOne(id);
+    const aeropuerto = await this.aeropuertoRepository.findOne({
+      where: { id: id },
+      relations: ['aerolineas'],
+    });
     if (!aeropuerto) {
       throw new BusinessLogicException(
         'Aeropuerto not found',
