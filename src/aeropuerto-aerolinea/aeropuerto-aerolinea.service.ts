@@ -105,14 +105,38 @@ export class AeropuertoAerolineaService {
       );
     }
 
+    for (let i = 0; i < airports.length; i++) {
+      const airport = await this.aeropuertoRepository.findOne({
+        where: { id: airports[i].id },
+      });
+      if (!airport) {
+        throw new BusinessLogicException(
+          'Aeropuerto no encontrado',
+          BusinessError.NOT_FOUND,
+        );
+      }
+      airports[i] = airport;
+    }
+
     airline.aeropuertos = airports;
     return this.aerolineaRepository.save(airline);
   }
 
-  async removeAiroportFromAirline(
+  async removeAirportFromAirline(
     airlineId: string,
     airportId: string,
   ): Promise<AerolineaEntity> {
+    const airport = await this.aeropuertoRepository.findOne({
+      where: { id: airportId },
+    });
+
+    if (!airport) {
+      throw new BusinessLogicException(
+        'Aeropuerto no encontrado',
+        BusinessError.NOT_FOUND,
+      );
+    }
+
     const airline = await this.aerolineaRepository.findOne({
       where: { id: airlineId },
       relations: ['aeropuertos'],
@@ -125,14 +149,13 @@ export class AeropuertoAerolineaService {
       );
     }
 
-    const airport = airline.aeropuertos.find(
-      (aeropuerto) => aeropuerto.id === airportId,
-    );
+    const aeropuertoAerolinea: AeropuertoEntity | undefined =
+      airline.aeropuertos.find((aeropuerto) => aeropuerto.id === airportId);
 
-    if (!airport) {
+    if (!aeropuertoAerolinea) {
       throw new BusinessLogicException(
-        'Aeropuerto no encontrado',
-        BusinessError.NOT_FOUND,
+        'El aeropuerto no está asociado a la aerolinea',
+        BusinessError.PRECONDITION_FAILED,
       );
     }
 
