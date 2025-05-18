@@ -69,6 +69,7 @@ export class AeropuertoAerolineaService {
   ): Promise<AeropuertoEntity> {
     const airline = await this.aerolineaRepository.findOne({
       where: { id: airlineId },
+      relations: ['aeropuertos'],
     });
     if (!airline) {
       throw new BusinessLogicException(
@@ -76,10 +77,58 @@ export class AeropuertoAerolineaService {
         BusinessError.NOT_FOUND,
       );
     }
-    const airport = await this.aeropuertoRepository.findOne({
-      where: { id: airportId },
-      relations: ['aerolineas'],
+    const airport = airline.aeropuertos.find(
+      (aeropuerto) => aeropuerto.id === airportId,
+    );
+
+    if (!airport) {
+      throw new BusinessLogicException(
+        'Aeropuerto no encontrado',
+        BusinessError.NOT_FOUND,
+      );
+    }
+    return airport;
+  }
+  async updateAirportsFromAirline(
+    airlineId: string,
+    airports: AeropuertoEntity[],
+  ): Promise<AerolineaEntity> {
+    const airline = await this.aerolineaRepository.findOne({
+      where: { id: airlineId },
+      relations: ['aeropuertos'],
     });
+
+    if (!airline) {
+      throw new BusinessLogicException(
+        'Aerolinea no encontrada',
+        BusinessError.NOT_FOUND,
+      );
+    }
+
+    airline.aeropuertos = airports;
+    return this.aerolineaRepository.save(airline);
+  }
+
+  async removeAiroportFromAirline(
+    airlineId: string,
+    airportId: string,
+  ): Promise<AerolineaEntity> {
+    const airline = await this.aerolineaRepository.findOne({
+      where: { id: airlineId },
+      relations: ['aeropuertos'],
+    });
+
+    if (!airline) {
+      throw new BusinessLogicException(
+        'Aerolinea no encontrada',
+        BusinessError.NOT_FOUND,
+      );
+    }
+
+    const airport = airline.aeropuertos.find(
+      (aeropuerto) => aeropuerto.id === airportId,
+    );
+
     if (!airport) {
       throw new BusinessLogicException(
         'Aeropuerto no encontrado',
@@ -87,16 +136,10 @@ export class AeropuertoAerolineaService {
       );
     }
 
-    const airportAirline = airport.aerolineas.find(
-      (aerolinea) => aerolinea.id === airline.id,
+    airline.aeropuertos = airline.aeropuertos.filter(
+      (aeropuerto) => aeropuerto.id !== airportId,
     );
 
-    if (!airportAirline) {
-      throw new BusinessLogicException(
-        'La aerolinea no está asociada al aeropuerto',
-        BusinessError.PRECONDITION_FAILED,
-      );
-    }
-    return airport;
+    return this.aerolineaRepository.save(airline);
   }
 }
